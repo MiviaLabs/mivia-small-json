@@ -1,0 +1,74 @@
+{
+ "phase": "realworld-slices r1 (post-commit register + slack boundary, audit-gated, one combined data round)",
+ "spec": "realworld-slices-r1",
+ "base_checkpoint": "microsoft/Multilingual-MiniLM-L12-H384",
+ "recipe": {
+  "epochs": 3,
+  "batch": 32,
+  "lr": 3e-05,
+  "warmup_frac": 0.1,
+  "clip": 1.0,
+  "max_len": 512,
+  "seed": 42,
+  "weight_decay": 0.01
+ },
+ "n_train_rows": 106616,
+ "aux_corpus": {
+  "path": "ood-aux-train-v6-realworld.jsonl",
+  "sha256": "b99d64e4ae5e039a3b67ea1bfe5f588f9af0aefb97849cb6c767f359628b127a",
+  "rows": 31171
+ },
+ "extra_corpus": {
+  "path": "extra-realworld-r1.jsonl",
+  "sha256": "3c380f37cd611458204c198c1feb9c925123ee348fd32eb30cb3c5b3c25acf9d",
+  "rows": 7494
+ },
+ "audit_stamp": {
+  "arm": "realworld-slices-r1",
+  "increment_text_share": 0.1313
+ },
+ "classes": [
+  "agent_step",
+  "commit",
+  "diagnostic",
+  "diff",
+  "issue",
+  "log_event",
+  "no_tool_call",
+  "pull_request",
+  "review_comment",
+  "text",
+  "tool_call"
+ ],
+ "torch": "2.9.1+cu128",
+ "gpu": "NVIDIA GeForce RTX 5080",
+ "nan_steps": 0,
+ "epochs": [
+  {
+   "epoch": 1,
+   "mean_loss": 0.12303179929464483,
+   "nan_steps": 0,
+   "seconds": 765.1
+  },
+  {
+   "epoch": 2,
+   "mean_loss": 0.05364676763159351,
+   "nan_steps": 0,
+   "seconds": 762.8
+  },
+  {
+   "epoch": 3,
+   "mean_loss": 0.031018668859481527,
+   "nan_steps": 0,
+   "seconds": 767.9
+  }
+ ],
+ "train_seconds": 2565.4,
+ "heldout_torch_accuracy": 99.71428571428571,
+ "int8_fp32_agreement": {
+  "pearson": 0.9988160064859152,
+  "argmax": 0.999,
+  "n": 1000
+ },
+ "in_domain_energy": -100.0
+}

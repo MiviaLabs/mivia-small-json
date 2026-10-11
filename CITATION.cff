@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using these metadata."
+title: mivia-small-json
+type: software
+authors:
+  - name: MiviaLabs
+    website: "https://mivia.app"
+repository-code: "https://github.com/MiviaLabs/mivia-small-json"
+abstract: >-
+  Small CPU models that structure coding-workflow signals into strictly
+  valid JSON: an 11-class schema router, a cross-encoder tool-match guard
+  with honest abstention, learned field extractors, and zero-shot
+  select/grade/verify primitives. CPU-only, under 2 GB RAM.
+keywords:
+  - json
+  - onnx
+  - text-classification
+  - tool-calling
+  - cpu-inference
+  - structured-output
+license: Apache-2.0
+version: 1.0.0
+date-released: "2026-10-11"

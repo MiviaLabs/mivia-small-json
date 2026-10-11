@@ -1,0 +1,51 @@
+{
+  "artifact": "level_extractor.skops",
+  "artifact_sha256": "65b2b9472049857c8031f58598861f1d4b0882799bc0ae60f083b97f102228c6",
+  "shipped_train_systems": [
+    "Android",
+    "Apache",
+    "BGL",
+    "HDFS",
+    "HPC",
+    "Hadoop",
+    "HealthApp",
+    "Linux",
+    "Mac",
+    "OpenSSH",
+    "OpenStack",
+    "Proxifier",
+    "Spark",
+    "Thunderbird",
+    "Windows",
+    "Zookeeper",
+    "format_augmented",
+    "logcat_real"
+  ],
+  "generalization": {
+    "model": "train-only-probe",
+    "train_systems": [
+      "Android",
+      "BGL",
+      "HDFS",
+      "HPC",
+      "HealthApp",
+      "Linux",
+      "Mac",
+      "OpenSSH",
+      "OpenStack",
+      "Spark",
+      "Thunderbird",
+      "Zookeeper",
+      "format_augmented",
+      "logcat_real"
+    ],
+    "held_out_systems": [
+      "Apache",
+      "Hadoop",
+      "Proxifier",
+      "Windows"
+    ],
+    "accuracy": 0.6698333333333333,
+    "coverage": 0.6698333333333333
+  }
+}

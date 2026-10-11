@@ -1,0 +1,30 @@
+{
+ "verdict": "PASS",
+ "bar_f1": 0.9,
+ "tau": 0.5476,
+ "dev": {
+  "tau": 0.5476,
+  "precision": 0.999,
+  "recall": 0.9959,
+  "f1": 0.9974,
+  "accuracy": 0.9975,
+  "tp": 969,
+  "fp": 1,
+  "fn": 4,
+  "tn": 1026
+ },
+ "eval": {
+  "tau": 0.5476,
+  "precision": 1.0,
+  "recall": 0.997,
+  "f1": 0.9985,
+  "accuracy": 0.9985,
+  "tp": 997,
+  "fp": 0,
+  "fn": 3,
+  "tn": 1000
+ },
+ "evaluated_utc": "2026-10-07T22:44:36.411943+00:00",
+ "seed": 42,
+ "artifact_sha256": "b71476cf1cabf2f7af74fe0fbceffe11e5f4f990f0bc094b08987eafa337ea49"
+}

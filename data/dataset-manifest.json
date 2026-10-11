@@ -1,0 +1,22 @@
+{
+  "data/heldout/dev-reference.jsonl": {
+    "rows": 2800,
+    "sha256": "269b7506e0b7946a1408d8b2b4b7bd2315ea5d3603d4726b6b78607ef14cbf30"
+  },
+  "data/heldout/spanfill-reserve.jsonl": {
+    "rows": 3191,
+    "sha256": "dcb3c03efd62b830bf819ae33f43572848ab6f7e176f7611f8f71991ec3ad8d1"
+  },
+  "data/heldout/test.jsonl": {
+    "rows": 350,
+    "sha256": "324a6a3f331184381eb825a083374fc8e246ce2353121eb27a3007e92eb92bcd"
+  },
+  "data/synthetic/dev.jsonl": {
+    "rows": 350,
+    "sha256": "4f344b3a80ebc8e2a9e0835270a7a54e9ff99997983f0333905a43ef8db5208c"
+  },
+  "data/synthetic/train.jsonl": {
+    "rows": 2800,
+    "sha256": "6f57c3841d244e484e9f70e1a38cf00d163d88839c3aa79d44e9ed967d4c61f5"
+  }
+}

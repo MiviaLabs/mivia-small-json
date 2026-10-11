@@ -1,0 +1,16 @@
+{
+  "model": "prose-title-extractor",
+  "algorithm": "FeatureHasher(2**18)+LogisticRegression(C=2.0)",
+  "train_token_samples": 1771916,
+  "rows": {
+    "csv_rows": 16674,
+    "pr_rows": 2462,
+    "refused_eval_or_dev": 1863,
+    "train": 17138,
+    "dev": 1998
+  },
+  "dev_title_exact_pct": 66.3,
+  "dev_body_token_recall": 0.998,
+  "seed": 42,
+  "sha256": "665e86795471ea8bac147ce1f83a522c6c20a2657bb225344285eb5b4659b97b"
+}

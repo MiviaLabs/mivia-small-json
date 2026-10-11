@@ -1,0 +1,13 @@
+[
+ "agent_step",
+ "commit",
+ "diagnostic",
+ "diff",
+ "issue",
+ "log_event",
+ "no_tool_call",
+ "pull_request",
+ "review_comment",
+ "text",
+ "tool_call"
+]

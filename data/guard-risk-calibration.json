@@ -1,0 +1,30 @@
+{
+  "artifact": "models/tool-match-int8.onnx",
+  "artifact_sha256": "48c43bce356e46ef015091ec6c8edbbe0df9ea317f31ebd984947f8974cbbd7b",
+  "n_calibration": 532,
+  "n_test": 531,
+  "alphas": {
+    "0.01": {
+      "threshold": 0.9998,
+      "accepted": 25,
+      "false_fire_marginal_pct": 0.94,
+      "false_fire_conditional_pct": 20.0,
+      "call_coverage_pct": 21.98
+    },
+    "0.05": {
+      "threshold": 0.9998,
+      "accepted": 87,
+      "false_fire_marginal_pct": 3.77,
+      "false_fire_conditional_pct": 22.99,
+      "call_coverage_pct": 73.63
+    },
+    "0.1": {
+      "threshold": 0.9996,
+      "accepted": 139,
+      "false_fire_marginal_pct": 10.36,
+      "false_fire_conditional_pct": 39.57,
+      "call_coverage_pct": 92.31
+    }
+  },
+  "caveat": "Guarantee holds on the calibration distribution. The BFCL near-misses are structurally harder than a random deployment mix; the test rate is a measurement, not a second guarantee."
+}

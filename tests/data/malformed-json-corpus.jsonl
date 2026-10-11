@@ -1,0 +1,30 @@
+{"case": "P py-literals+list", "raw": "{'path': 'x.py', 'overwrite': True, 'n': None, 'tags': ['a','b'],}", "expect_keys": ["n", "overwrite", "path", "tags"], "expect_mode": "keys"}
+{"case": "P xml-wrapped", "raw": "<tool_call>{\"name\": \"search\", \"arguments\": {\"q\": \"rust async\"}}</tool_call>", "expect_keys": ["arguments", "name"], "expect_mode": "keys"}
+{"case": "P trailing commas", "raw": "{\"limit\": 10, \"offset\": 0,}", "expect_keys": ["limit", "offset"], "expect_mode": "keys"}
+{"case": "P escaped wrapper", "raw": "'{\"target\": \"prod\"}'", "expect_keys": ["target"], "expect_mode": "keys"}
+{"case": "P empty", "raw": "", "expect_keys": [], "expect_mode": "empty-ok"}
+{"case": "T nested trailing commas", "raw": "{\"a\": {\"b\": [1, 2,],},}", "expect_keys": ["a"], "expect_mode": "keys"}
+{"case": "T list trailing comma", "raw": "{\"files\": [\"a.py\", \"b.py\",],}", "expect_keys": ["files"], "expect_mode": "keys"}
+{"case": "T truncated object", "raw": "{\"path\": \"/var/log/app.log\", \"lines\": 100", "expect_keys": [], "expect_mode": "refuse-ok"}
+{"case": "T truncated array", "raw": "{\"items\": [1, 2, 3", "expect_keys": [], "expect_mode": "refuse-ok"}
+{"case": "T unescaped control char", "raw": "{\"cmd\": \"echo\tthere\nnow\"}", "expect_keys": ["cmd"], "expect_mode": "keys"}
+{"case": "R simple single quotes", "raw": "{'foo': 'bar'}", "expect_keys": ["foo"], "expect_mode": "keys"}
+{"case": "R nested single-quote dict", "raw": "{'outer': {'inner': 'val'}, 'k': 1}", "expect_keys": ["k", "outer"], "expect_mode": "keys"}
+{"case": "R single-quote empty str", "raw": "{'name': '', 'id': 7}", "expect_keys": ["id", "name"], "expect_mode": "keys"}
+{"case": "R single-quote in list", "raw": "{\"tags\": ['alpha', 'beta'], \"n\": 2}", "expect_keys": ["n", "tags"], "expect_mode": "keys"}
+{"case": "R bools none mixed", "raw": "{'a': True, 'b': False, 'c': None, 'd': 'yes'}", "expect_keys": ["a", "b", "c", "d"], "expect_mode": "keys"}
+{"case": "R apostrophe in dq value", "raw": "{\"note\": \"don't panic\", \"n\": 1}", "expect_keys": ["n", "note"], "expect_mode": "keys"}
+{"case": "R key no space", "raw": "{'k':1,'j':2}", "expect_keys": ["j", "k"], "expect_mode": "keys"}
+{"case": "R single-quote sentence", "raw": "{'msg': 'it's fine here', 'n': 0}", "expect_keys": ["msg", "n"], "expect_mode": "refuse-ok"}
+{"case": "R md fence json", "raw": "```json\n{\"a\": 1}\n```", "expect_keys": ["a"], "expect_mode": "keys"}
+{"case": "R md fence plain", "raw": "```\n{'a': True}\n```", "expect_keys": ["a"], "expect_mode": "keys"}
+{"case": "R md fence + prose", "raw": "Here are the args:\n```json\n{\"path\": \"x.py\"}\n```", "expect_keys": ["path"], "expect_mode": "keys"}
+{"case": "R functioncall fence", "raw": "<functioncall>{\"name\": \"f\", \"arguments\": {\"x\": 1}}</functioncall>", "expect_keys": ["arguments", "name"], "expect_mode": "keys"}
+{"case": "R xml multiline", "raw": "<tool_call>\n{\"q\": \"test\", \"limit\": 5}\n</tool_call>", "expect_keys": ["limit", "q"], "expect_mode": "keys"}
+{"case": "R dq-wrapped", "raw": "\"{'a': 1}\"", "expect_keys": ["a"], "expect_mode": "keys"}
+{"case": "R whitespace heavy", "raw": "  {  'k' :  'v'  ,  'n' : 3 , }  ", "expect_keys": ["k", "n"], "expect_mode": "keys"}
+{"case": "R nested list of dicts", "raw": "{'items': [{'id': 1,}, {'id': 2,}],}", "expect_keys": ["items"], "expect_mode": "keys"}
+{"case": "R unquoted-ish numeric", "raw": "{\"port\": 8080, \"host\": \"db.internal\"}", "expect_keys": ["host", "port"], "expect_mode": "keys"}
+{"case": "R python set-like (lost)", "raw": "{'tags': {'a', 'b'}}", "expect_keys": [], "expect_mode": "refuse-ok"}
+{"case": "R tuple-ish (lost)", "raw": "{'pair': (1, 2)}", "expect_keys": [], "expect_mode": "refuse-ok"}
+{"case": "R unicode values", "raw": "{'stadt': 'M\u00fcnchen', 'ok': True}", "expect_keys": ["ok", "stadt"], "expect_mode": "keys"}

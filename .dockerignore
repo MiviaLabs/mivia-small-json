@@ -1,0 +1,33 @@
+# The build context must stay narrow: only src/, models/ and the pin files
+# are COPYed (see Dockerfile). This file is the second line of defense for
+# context size and against leaking private material into the daemon.
+
+# Private / owner-local data — must never enter an image or a context.
+data/
+**/gh-user/
+
+# Version control, envs, agent scratch
+.git/
+.venv/
+.scratch/
+.muse/
+.video_agent/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Agent-skill checkouts (serving does not need them)
+.agents/
+.claude/
+.grok/
+
+# Documentation, reports, benchmarks, specs (not needed at runtime)
+docs/
+reports/
+scripts/
+tests/
+*.md
+!README.md
+# The split-volume assemble step runs at image build (see Dockerfile):
+!scripts/assemble_models.py

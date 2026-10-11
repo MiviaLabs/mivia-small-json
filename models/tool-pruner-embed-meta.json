@@ -1,0 +1,29 @@
+{
+ "arm": "embed-tool-pruner (Tier-2, zero-shot)",
+ "spec": "embed-tool-pruner",
+ "model_id": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+ "license": "apache-2.0",
+ "lineage": "sentence-transformers paraphrase-multilingual-MiniLM-L12-v2: XLM-R MiniLM-L12 backbone (118M params), mean pooling + L2 normalization trained in; exported zero-shot, no fine-tuning",
+ "graph": "input_ids/attention_mask (int64, dynamic batch+seq) -> embedding (fp32 rows, L2-normalized, inside the graph)",
+ "max_len": 128,
+ "emb_dim": 384,
+ "quantization": "onnxruntime quantize_dynamic, QInt8 weights",
+ "verify": {
+  "deterministic": true,
+  "en_cosine_request_weather": 0.5656,
+  "en_cosine_request_dna": -0.1043,
+  "de_cosine_request_weather": 0.5659,
+  "de_cosine_request_dna": -0.1055,
+  "solo_vs_batch_max_vec_delta": 0.029081404209136963,
+  "solo_vs_batch_max_cos_delta": 0.04835059493780136,
+  "batch_bitwise_identical": false,
+  "survivor_sets_checked": 30,
+  "survivor_sets_identical_solo_vs_batch": false,
+  "worst_top1_cos_delta": 0.03509396
+ },
+ "decision": {
+  "request_side": "one single-input forward, always",
+  "tool_side_batching_allowed": false
+ },
+ "created": "2026-10-10"
+}

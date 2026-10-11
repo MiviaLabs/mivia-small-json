@@ -1,0 +1,42 @@
+{
+  "artifact": "implicit_severity.skops",
+  "artifact_sha256": "4a45fa14765488c3a948bcf57b49f88cd481bc5907e1a5e8ae03e107f1a7c1b2",
+  "shipped_train_systems": [
+    "Android",
+    "Apache",
+    "BGL",
+    "HDFS",
+    "Hadoop",
+    "Linux",
+    "Mac",
+    "OpenSSH",
+    "OpenStack",
+    "Proxifier",
+    "Spark",
+    "Thunderbird",
+    "Windows",
+    "Zookeeper"
+  ],
+  "generalization": {
+    "model": "train-only-probe",
+    "train_systems": [
+      "Android",
+      "BGL",
+      "HDFS",
+      "Linux",
+      "Mac",
+      "OpenSSH",
+      "OpenStack",
+      "Spark",
+      "Thunderbird",
+      "Zookeeper"
+    ],
+    "held_out_systems": [
+      "Apache",
+      "Hadoop",
+      "Proxifier",
+      "Windows"
+    ],
+    "accuracy": 0.7745830937320299
+  }
+}

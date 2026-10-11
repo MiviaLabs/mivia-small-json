@@ -1,0 +1,91 @@
+{
+ "alpha": 0.12,
+ "tau": 0.643297427254163,
+ "n_fit": 1033,
+ "fit_positives": 624,
+ "fitted_utc": "2026-10-11T04:46:39.840090+00:00",
+ "rank_artifact": "models/select-rank-int8.onnx",
+ "rank_sha256": "2db0d0aed91f168120bf92f7e3f6bd560b53f212e305cef707804a3be6f0c053",
+ "ece_before": 0.24569071779268914,
+ "ece_after": 0.1302165324994099,
+ "head": "select-rank (zero-shot-select-r2 candidate 2db0d0aed91f1681\u2026, OWNER WIRING DECREE 2026-10-11)",
+ "serves": "matcher.select() / POST /v1/select (tool head)",
+ "companion_meta": "models/select-calibration-meta.json (the guard-rank surface; legacy, byte-identical, rollback)",
+ "band_note": "2026-10-11 wiring fit: the band-aware conformal tau re-derived on the WIRED head's own confidence distribution over train-split selections (select-rank); the legacy select-calibration-meta.json is untouched and keeps serving the guard-rank surface. Confidence gating (status abstain under the band tau) is the shipped abstention mechanism for this head \u2014 the dedicated nomatch head is NOT wired (its null signal never fires on near-domain oos; registered accepted trade).",
+ "bands": {
+  "shape_key": "candidate_count",
+  "small": {
+   "k_max": 4,
+   "tau": 0.643297427254163,
+   "note": "the small-band fit (BFCL-dev + prose, K=4, gold + 3 distractors) on THIS head's own softmax"
+  },
+  "many": {
+   "k_min": 5,
+   "assignment": "serve the fit point with the nearest K by |log(k / k_fit)|; ties to the larger K (the lower, more conservative support)",
+   "platt_map": "this head's own select-rank-calibration.skops (monotone, fitted on the K=4 population); each tau is conformal on its own point's population at the registered alpha",
+   "tau_by_k": [
+    {
+     "k": 8,
+     "tau": 0.312911532214,
+     "n_fit": 600,
+     "fit_positives": 581,
+     "top1_fit": 96.83,
+     "coverage_at_tau": 1.0,
+     "wrong_called_at_tau": 0.0317,
+     "alpha": 0.12,
+     "source": "banking77-train",
+     "seed": 42
+    },
+    {
+     "k": 16,
+     "tau": 0.247279662839,
+     "n_fit": 600,
+     "fit_positives": 565,
+     "top1_fit": 94.17,
+     "coverage_at_tau": 1.0,
+     "wrong_called_at_tau": 0.0583,
+     "alpha": 0.12,
+     "source": "banking77-train",
+     "seed": 42
+    },
+    {
+     "k": 32,
+     "tau": 0.219871690077,
+     "n_fit": 600,
+     "fit_positives": 543,
+     "top1_fit": 90.5,
+     "coverage_at_tau": 1.0,
+     "wrong_called_at_tau": 0.095,
+     "alpha": 0.12,
+     "source": "banking77-train",
+     "seed": 42
+    },
+    {
+     "k": 77,
+     "tau": 0.218016839732,
+     "n_fit": 600,
+     "fit_positives": 492,
+     "top1_fit": 82.0,
+     "coverage_at_tau": 0.8383,
+     "wrong_called_at_tau": 0.1173,
+     "alpha": 0.12,
+     "source": "banking77-train-all",
+     "seed": 42
+    },
+    {
+     "k": 151,
+     "tau": 0.205112909461,
+     "n_fit": 600,
+     "fit_positives": 503,
+     "top1_fit": 83.83,
+     "coverage_at_tau": 0.805,
+     "wrong_called_at_tau": 0.118,
+     "alpha": 0.12,
+     "source": "clinc150-train-all",
+     "seed": 42
+    }
+   ],
+   "fitted_utc": "2026-10-11T04:49:01.921387+00:00"
+  }
+ }
+}

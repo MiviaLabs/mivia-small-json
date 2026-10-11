@@ -1,0 +1,9 @@
+{
+ "file": "intent-rank-mul-int8.onnx",
+ "parts": [
+  "intent-rank-mul-int8.onnx.part00",
+  "intent-rank-mul-int8.onnx.part01"
+ ],
+ "sha256": "ac90a0497c99659df9abf97b53d072e88972063ad438afed4b1db65556759d47",
+ "size": 118243065
+}

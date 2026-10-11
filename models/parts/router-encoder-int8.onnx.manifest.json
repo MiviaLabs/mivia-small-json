@@ -1,0 +1,9 @@
+{
+ "file": "router-encoder-int8.onnx",
+ "parts": [
+  "router-encoder-int8.onnx.part00",
+  "router-encoder-int8.onnx.part01"
+ ],
+ "sha256": "67536e224d46abd467bec979bfbf135e8c28a4af386a16c16648e7dd821aec96",
+ "size": 118219994
+}

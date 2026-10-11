@@ -1,0 +1,22 @@
+{
+  "source": "data/heldout/dev-reference.jsonl",
+  "files": [
+    "269b7506e0b7946a1408d8b2b4b7bd2315ea5d3603d4726b6b78607ef14cbf30"
+  ],
+  "n": 2693,
+  "min_probability": 0.9,
+  "admission_threshold": 0.9219,
+  "admission_coverage": 0.95,
+  "admission_precision": 1.0,
+  "bands_scored": 10,
+  "predicted": 0.9886,
+  "observed_accuracy": 0.9996,
+  "mean_abs_error": 0.011,
+  "brier": 0.0007,
+  "ece": 0.011,
+  "max_abs_error": 0.0937,
+  "max_abs_error_band": 0,
+  "max_significant_error": 0.0,
+  "max_error_allowed": 0.1,
+  "router_sha256": "e5fcadf05a755aea366a690704ebdbacb606229396c8ab2500174c51b1f52182"
+}

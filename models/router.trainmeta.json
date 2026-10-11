@@ -1,0 +1,130 @@
+{
+  "created": "2026-10-07T13:11:06.612838+00:00",
+  "git_sha": "52a59f827ffb968b32545d3ea5f5976267d6dc07",
+  "artifact_sha256": "e5fcadf05a755aea366a690704ebdbacb606229396c8ab2500174c51b1f52182",
+  "seed": 42,
+  "n_train_rows": 67951,
+  "classes": [
+    "agent_step",
+    "commit",
+    "diagnostic",
+    "diff",
+    "issue",
+    "log_event",
+    "no_tool_call",
+    "pull_request",
+    "review_comment",
+    "tool_call"
+  ],
+  "spec_fingerprint": "3fb25cd5e0cf2f45766bc87f513e2f551fabeed7bf8d67104f3f8cc2082923fe",
+  "data": [
+    {
+      "path": "data/synthetic/train.jsonl",
+      "sha256": "6f57c3841d244e484e9f70e1a38cf00d163d88839c3aa79d44e9ed967d4c61f5",
+      "rows": 2800
+    },
+    {
+      "path": "data/real/issue/train.jsonl",
+      "sha256": "de82f8bd7401d687d51c6140454049963fe838bea645439cbc9c91163bd5e7d5",
+      "rows": 16861
+    },
+    {
+      "path": "data/real/commit/train.jsonl",
+      "sha256": "80cbdeedf437766befe598f1bcb7766f6fab7cb2946b9114c6fac26b5292d121",
+      "rows": 3095
+    },
+    {
+      "path": "data/real/log_event/train.jsonl",
+      "sha256": "341936768abadfbde85360b3ad1f2964a9e1c7162b373843d1c25bd4c5b31204",
+      "rows": 12000
+    },
+    {
+      "path": "data/real/tool_call/train.jsonl",
+      "sha256": "d56dd6742800574f466f1d02ad9b8b549dc3330ef6445d65f82d34eeb7c0247a",
+      "rows": 9334
+    },
+    {
+      "path": "data/real/no_tool_call/train.jsonl",
+      "sha256": "d9bce35e34990c1a329267e5bca2ef8849fbd375694c3ee585deba6d88a25b94",
+      "rows": 219
+    },
+    {
+      "path": "data/real/diagnostic/train.jsonl",
+      "sha256": "1f633aab483634946425ac13374759f1b37ec7de3c7b00a45287ca376700049b",
+      "rows": 3067
+    },
+    {
+      "path": "data/real/diff/train.jsonl",
+      "sha256": "2df265da88c9b37211ac612362566af93f602347296e91ba2ed87ff7f678c307",
+      "rows": 3000
+    },
+    {
+      "path": "data/real/review_comment/train.jsonl",
+      "sha256": "48748ef4e06329e6946691634585c12b3af94816c46a2eeaad9d5bf596e6ae05",
+      "rows": 10530
+    },
+    {
+      "path": "data/real/agent_step/train.jsonl",
+      "sha256": "1ae5cc5552aabe02e4f2a14bfc0f76ef3c0935317a18fd5e1560978ded234d66",
+      "rows": 3794
+    },
+    {
+      "path": "data/pool/confident.jsonl",
+      "sha256": "530458acaa48ac372c007602d0451f23bf9bac9e483851085e48fc0ad83614e9",
+      "rows": 50
+    },
+    {
+      "path": "data/incoming/gh-user/curated/commit.jsonl",
+      "sha256": "4778d1b2b10075bc1278bb4cd7baf1d72f6cf59cb589d501365faaf922f88bfb",
+      "rows": 2760
+    },
+    {
+      "path": "data/incoming/gh-user/curated/diagnostic.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0
+    },
+    {
+      "path": "data/incoming/gh-user/curated/diff.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0
+    },
+    {
+      "path": "data/incoming/gh-user/curated/issue.jsonl",
+      "sha256": "48ce9ad896ef2ad27a2c56743720cacef9a7657e589289d450f609fd26961fcd",
+      "rows": 70
+    },
+    {
+      "path": "data/incoming/gh-user/curated/log_event.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0
+    },
+    {
+      "path": "data/incoming/gh-user/curated/pull_request.jsonl",
+      "sha256": "ba0ca7496f7d535e3df6062049347ebd9f282544d6813c35ee415911fb8101ab",
+      "rows": 70
+    },
+    {
+      "path": "data/incoming/gh-user/curated/review_comment.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0
+    },
+    {
+      "path": "data/incoming/gh-user/curated/tool_call.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rows": 0
+    }
+  ],
+  "environment": {
+    "python": "3.12.14",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "skops": "0.16.0"
+  },
+  "metrics": {
+    "dev_accuracy": 1.0,
+    "dev_macro_f1": 1.0,
+    "real_dev_accuracy": 0.9704847537138389,
+    "real_dev_macro_f1": 0.8984686538698583
+  }
+}

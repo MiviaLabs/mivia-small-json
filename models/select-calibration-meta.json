@@ -1,0 +1,89 @@
+{
+ "alpha": 0.12,
+ "tau": 0.7029786367096996,
+ "n_fit": 1033,
+ "fit_positives": 743,
+ "fitted_utc": "2026-10-07T18:14:53.711004+00:00",
+ "rank_artifact": "models/tool-match-int8.onnx",
+ "rank_sha256": "48c43bce356e46ef015091ec6c8edbbe0df9ea317f31ebd984947f8974cbbd7b",
+ "ece_before": 0.3867701163750303,
+ "ece_after": 0.05581398322498078,
+ "alpha_note": "owner re-registration 2026-10-09: the shipped tau 0.7030 measured 11.43% wrong-pick on the frozen reserve (quickwins-serving QW-C run 2); alpha re-registered to 0.12 so the guarantee claim matches the measurement. Threshold unchanged.",
+ "bands": {
+  "shape_key": "candidate_count",
+  "small": {
+   "k_max": 4,
+   "tau": 0.7029786367096996,
+   "note": "the unchanged shipped small-band fit (BFCL-dev + prose, K=4, gold + 3 distractors)"
+  },
+  "many": {
+   "k_min": 5,
+   "assignment": "serve the fit point with the nearest K by |log(k / k_fit)|; ties to the larger K (the lower, more conservative support)",
+   "platt_map": "the shared shipped select-calibration.skops (monotone, fitted on the K=4 population); each tau is conformal on its own point's population at the registered alpha",
+   "tau_by_k": [
+    {
+     "k": 8,
+     "tau": 0.415019204146,
+     "n_fit": 600,
+     "fit_positives": 461,
+     "top1_fit": 76.83,
+     "coverage_at_tau": 0.68,
+     "wrong_called_at_tau": 0.1176,
+     "alpha": 0.12,
+     "source": "banking77-train",
+     "seed": 42
+    },
+    {
+     "k": 16,
+     "tau": 0.320930861333,
+     "n_fit": 600,
+     "fit_positives": 427,
+     "top1_fit": 71.17,
+     "coverage_at_tau": 0.53,
+     "wrong_called_at_tau": 0.1164,
+     "alpha": 0.12,
+     "source": "banking77-train",
+     "seed": 42
+    },
+    {
+     "k": 32,
+     "tau": 0.344359310769,
+     "n_fit": 600,
+     "fit_positives": 379,
+     "top1_fit": 63.17,
+     "coverage_at_tau": 0.2517,
+     "wrong_called_at_tau": 0.1126,
+     "alpha": 0.12,
+     "source": "banking77-train",
+     "seed": 42
+    },
+    {
+     "k": 77,
+     "tau": 0.280769512295,
+     "n_fit": 600,
+     "fit_positives": 297,
+     "top1_fit": 49.5,
+     "coverage_at_tau": 0.0733,
+     "wrong_called_at_tau": 0.0909,
+     "alpha": 0.12,
+     "source": "banking77-train-all",
+     "seed": 42
+    },
+    {
+     "k": 151,
+     "tau": 0.258916471751,
+     "n_fit": 600,
+     "fit_positives": 320,
+     "top1_fit": 53.33,
+     "coverage_at_tau": 0.2383,
+     "wrong_called_at_tau": 0.1119,
+     "alpha": 0.12,
+     "source": "clinc150-train-all",
+     "seed": 42
+    }
+   ],
+   "fitted_utc": "2026-10-10T20:16:20.468467+00:00"
+  }
+ },
+ "band_note": "2026-10-11 zs-diag fix: the shipped small-band tau abstained on EVERY many-candidate row (600/600 Banking77 test; 0% called from K=8 up on train). bands.many re-registers the conformal tau per measured candidate count on train-split selections with known gold; legacy keys unchanged; rank artifact bytes untouched."
+}

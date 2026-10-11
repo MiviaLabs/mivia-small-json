@@ -1,0 +1,102 @@
+# environments & caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# local agent state & secrets
+.agents/local/
+.env*
+
+# ephemeral agent task files (tickets, exploration notes) — specs are committed in docs/specs/
+.scratch/
+
+# owner-repo harvest: may contain private/org code, keep it out of commits
+data/incoming/gh-user/
+data/incoming/harvested-sessions/
+data/incoming/curated-sessions/
+data/incoming/external/harvest-sessions/
+
+# reviewed hard rows promoted into the labeled pool (local training material)
+data/pool/promoted/
+
+# few-shot onboarding runtime artifacts (per-user learned heads, skops;
+# docs/specs/few-shot-onboarding/spec.md — evidence lives in committed tests
+# and reports, the artifacts are runtime-local)
+data/fewshot/
+
+# bulky intermediates (summarized reports and frozen corpora are committed)
+reports/raw/
+data/raw/
+
+# banned serialization format — skops.io only (see AGENTS.md rule 4)
+*.pkl
+*.pickle
+
+# build artifacts
+*.egg-info/
+build/
+dist/
+
+# bench writes dated reports on every test run
+reports/bench/
+
+# spike: downloaded ONNX encoder (big binary, not training data)
+data/incoming/models/
+data/incoming/external/issue-priority/issues-raw.jsonl
+
+# near-miss augmentation experiment (P0-D, falsified): bulky downloads,
+# fetch-on-demand via scripts/build_tool_match_corpus.py --nearmiss
+data/incoming/external/when2call/
+data/incoming/external/xlam-irrelevance/
+data/incoming/external/bfcl/pairs-nm-*.jsonl
+data/incoming/external/bfcl/pairs-nearmiss.jsonl
+
+# phase-1 data acquisition (scripts/fetch_data_phase1.py): bulky raw dumps,
+# re-fetched on demand. The curated outputs (data/real, nlbse24/issues.jsonl,
+# bfcl/pairs-ace.jsonl, acebench/*.json) stay committed.
+data/incoming/external/gitbugs/
+data/incoming/external/commit-chronicle/
+data/incoming/external/nlbse24/*.csv
+
+# OOD eval set: per-source raw dumps are fetch-on-demand
+# (scripts/build_ood_set.py); the combined deduped set is committed.
+data/incoming/ood/raw/
+
+# grade teacher staging (track C, falsified): raw pool + unpromoted
+# candidates; the agreed-pool method is reproducible via
+# scripts/teacher_label_business.py. Never committed.
+data/incoming/grade-teacher/
+
+# tier-balanced teacher pool staging (track C retry): same policy —
+# reproducible via scripts/teacher_pool_balanced.py. Never committed.
+data/incoming/grade-teacher-balanced/
+
+# model-teacher pool staging: labeled by the session LLM (see provenance.json);
+# same staging policy as the other teacher pools. Never committed.
+data/incoming/grade-teacher-model/
+data/incoming/external/ghsa/*.log
+
+# Split-volume artifacts: the >100MB files are stored as models/parts/ and
+# assembled locally by scripts/assemble_models.py (GitHub rejects >100MB
+# files; CI and the Dockerfile run the assemble step).
+models/router-encoder-int8.onnx
+models/intent-rank-mul-int8.onnx
+models/tool-pruner-embed-int8.onnx
+
+# Per-key metering store (spec docs/specs/per-key-metering/spec.md):
+# aggregate counters + key metadata ONLY (zero retention holds — no request
+# data ever enters it), but it is runtime state, not repo content.
+data/metering.sqlite3
+data/metering.sqlite3-wal
+data/metering.sqlite3-shm
+
+# NLI raw dumps (zero-shot-select-r2): the upstream zips exceed the 100MB
+# GitHub hard limit (MNLI 227MB); sha256 recorded in
+# data/incoming/external/nli/PROVENANCE.md, converted rows committed under
+# data/real/zero-shot-select-r2/
+data/incoming/external/nli/raw/
+
+# bench/eval scripts write dated instruments here at runtime; not repo content
+reports/

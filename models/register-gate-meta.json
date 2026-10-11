@@ -1,0 +1,20 @@
+{
+  "tau_dev_chosen": 0.302,
+  "precision_floor": 0.98,
+  "seed": 11,
+  "train_n": 604,
+  "dev_n": 151,
+  "train_positives": 302,
+  "dev_positives": 77,
+  "negatives": 302,
+  "sklearn_version": "1.9.1",
+  "positives": "specialist_pool.jsonl",
+  "tau": 0.302,
+  "sha256": "aa9246d0cca35e7c",
+  "shipped": {
+    "report": "reports/grade-register-router.md",
+    "specialist_seed": 42,
+    "tau_note": "tau 0.302 per the pre-registered rule (smallest tau with dev precision >= 0.98); the 0.6537 precision-margin alternative FAILS the bar (see report sensitivity analysis); gate model bytes rebuilt after review fixes (negative dedupe, meta completeness) but behaviorally identical to the promoted gate",
+    "note": "tau chosen on gate dev split only; never retuned on panel or slice"
+  }
+}
