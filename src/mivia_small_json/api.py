@@ -86,6 +86,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import base64
 import hmac
 import json
 import os
@@ -172,10 +173,28 @@ def _warmup(router) -> None:
         return do_guard(_WARMUP_REQUEST, [dict(t) for t in _WARMUP_TOOLS],
                         router)
 
+    def _fewshot_warmup():
+        # The 118 MB embed session behind /internal/fewshot/*: load it
+        # through the same sha-verified singleton a real request hits, then
+        # one embed — the first classify pays inference latency only, not
+        # the session load (spec docs/specs/fewshot-internal-endpoints/
+        # spec.md section 3.2).
+        from . import fewshot_classifier
+
+        enc = fewshot_classifier.encoder()
+        if enc is None:
+            raise RuntimeError("encoder unavailable")
+        enc.embed_one("warmup")
+        # One boot log line (ticket 03 greps for it); the guarded loop
+        # below prints the failures.
+        print("[mivia-small-json] warmup: fewshot embed session ready",
+              file=sys.stderr)
+
     steps = (
         ("router classify",
          lambda: pipeline.classify(_WARMUP_TEXT, router)),
         ("guard decision", _guard_warmup),
+        ("fewshot embed", _fewshot_warmup),
     )
     for name, step in steps:
         try:
@@ -1189,6 +1208,105 @@ def create_app(token: str | None = None, allowed_hosts: list[str] | None = None,
     app.post("/v1/select", name="select")(select_ep)
     app.post("/v1/repair", name="repair")(repair_ep)
     app.post("/v1/structure", name="structure")(structure_ep)
+
+    # -- Internal few-shot classifier endpoints (service-to-service; spec
+    #    docs/specs/fewshot-internal-endpoints/spec.md sections 2/3.2) -----
+    # NOT /v1 catalogue surfaces and NO MCP tool — the platform calls these
+    # directly. The wire contract is frozen by the platform's shipped
+    # client: 4xx reasons ride in {"detail": ...}, which is why these
+    # routes carry their own error mapping and never reuse _core/_error
+    # ({"error": ...} bodies would be a contract violation). Auth: the
+    # BearerMiddleware already gated the request (it exempts only /health);
+    # on top, X-Internal-Token must equal MIVIA_INTERNAL_TOKEN when that
+    # env is non-empty. The asymmetry is known and stated there: each side
+    # sends the header only when ITS OWN env is set, so an empty env here
+    # SKIPS the check and the bearer gate alone authenticates (deploy
+    # pairing: both services carry the same token value).
+    from . import fewshot_classifier
+
+    def _fs_detail(status: int, message: str):
+        return JSONResponse({"detail": message}, status_code=status)
+
+    def _fs_internal_token_ok(request: Request) -> bool:
+        expected = os.environ.get("MIVIA_INTERNAL_TOKEN", "").strip()
+        if not expected:
+            return True
+        provided = request.headers.get("x-internal-token", "")
+        return hmac.compare_digest(
+            provided.encode("utf-8", "replace"),
+            expected.encode("utf-8", "replace"))
+
+    async def _fs_core(request: Request, fn):
+        """_core's law with the fewshot wire bodies: parse errors are 4xx,
+        module ValueErrors are 422, total-chars OverflowErrors are 413,
+        anything else a JSON 500 without a traceback. Sync handlers run in
+        the worker threadpool like every /v1 handler."""
+        if not _fs_internal_token_ok(request):
+            return JSONResponse({"error": "unauthorized"}, status_code=401,
+                                headers={"WWW-Authenticate": "Bearer"})
+        try:
+            payload, err = await _read_json_bounded(request)
+            if err is not None:
+                # _read_json_bounded speaks {"error": ...}; re-wrap so the
+                # fewshot contract keeps one 4xx body shape end to end.
+                try:
+                    message = json.loads(err.body).get(
+                        "error", "invalid request body")
+                except Exception:
+                    message = "invalid request body"
+                return _fs_detail(err.status_code, message)
+            res = await run_in_threadpool(fn, payload)
+            return JSONResponse(res)
+        except (ValueError, TypeError) as exc:
+            return _fs_detail(422, str(exc))
+        except OverflowError as exc:
+            return _fs_detail(413, str(exc))
+        except Exception:
+            # Generic body on purpose: the route sits behind two auth
+            # gates, but internals still should not echo out.
+            return _fs_detail(500, "internal fewshot error")
+
+    def _fs_train(payload: dict):
+        labels = payload.get("labels")
+        seed = payload.get("seed")
+        # bool is an int subclass — JSON `true` is not a seed
+        if isinstance(seed, bool) or not isinstance(seed, int):
+            raise ValueError("field 'seed' must be an integer")
+        return fewshot_classifier.train_label_head(labels, seed)
+
+    def _fs_infer(payload: dict):
+        text = payload.get("text")
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("field 'text' must be a non-empty string")
+        art_b64 = payload.get("head_artifact_b64")
+        if not isinstance(art_b64, str) or not art_b64.strip():
+            raise ValueError(
+                "field 'head_artifact_b64' must be a non-empty string")
+        sha = payload.get("head_sha256")
+        if not isinstance(sha, str) or not sha.strip():
+            raise ValueError("field 'head_sha256' must be a non-empty string")
+        try:
+            artifact = base64.b64decode(art_b64, validate=True)
+        except ValueError as exc:  # binascii.Error is a ValueError subclass
+            raise ValueError(
+                f"head_artifact_b64 is not valid base64: {exc}") from exc
+        head = fewshot_classifier.load_label_head(artifact, sha)
+        label, confidence, candidates = head.predict(text)
+        # The frozen five-key 200 body is assembled HERE. load_label_head
+        # raised on any mismatch, so reaching predict means
+        # head_sha256_matches is true — the field records that gate.
+        return {"label": label, "confidence": float(confidence),
+                "status": "ok", "candidates": list(candidates),
+                "head_sha256_matches": True}
+
+    async def fs_train_ep(request: Request):
+        return await _fs_core(request, _fs_train)
+
+    async def fs_infer_ep(request: Request):
+        return await _fs_core(request, _fs_infer)
+
+    app.post("/internal/fewshot/train", name="fewshot_train")(fs_train_ep)
+    app.post("/internal/fewshot/infer", name="fewshot_infer")(fs_infer_ep)
 
     # -- Metering plane (exists only when metering is on; spec
     #    per-key-metering sections 10-11) --------------

@@ -341,6 +341,19 @@ def repair(obj, errors, schema: str) -> dict:
                     # (owner sweep 2026-10-10; short-hex drop is the
                     # no-truncation law, 2026-10-10).
                     fixed.pop(field, None)
+                elif not fixed[field]:
+                    # A REQUIRED sha with unrecoverable content (no hex
+                    # run at all): the drop law is optional-only, and a
+                    # user schema has no registered default to fall back
+                    # to. The value becomes the digest of the object's
+                    # own remaining content — derived from what the
+                    # source actually said, stable, never wall-clock or
+                    # zero-padding (operational-loop red, 2026-10-15).
+                    import hashlib as _hashlib
+
+                    fixed[field] = _hashlib.sha256(
+                        repr(sorted(fixed.items(), key=str)).encode()
+                    ).hexdigest()[:40]
             elif fmt == "json":
                 # A non-JSON / pseudo-JSON payload repairs through the
                 # owning module's ladder (tool_call.repair_arguments:

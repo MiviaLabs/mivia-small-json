@@ -291,19 +291,22 @@ class _ServeServer:
         return self.server.server_address[1]
 
     def post(self, body: bytes | None, headers: dict | None = None):
-        import urllib.error
-        import urllib.request
+        import http.client
 
         h = {"Content-Type": "application/json"}
         h.update(headers or {})
-        req = urllib.request.Request(
-            f"http://127.0.0.1:{self.port}/classify", data=body,
-            headers=h, method="POST")
+        conn = http.client.HTTPConnection("127.0.0.1", self.port, timeout=5)
         try:
-            with urllib.request.urlopen(req, timeout=5) as resp:
-                return resp.status, json.loads(resp.read())
-        except urllib.error.HTTPError as exc:
-            return exc.code, json.loads(exc.read())
+            try:
+                conn.request("POST", "/classify", body=body, headers=h)
+            except (BrokenPipeError, ConnectionResetError):
+                # The server may reject and close before the body lands;
+                # its status response is already in the receive buffer.
+                pass
+            resp = conn.getresponse()
+            return resp.status, json.loads(resp.read())
+        finally:
+            conn.close()
 
     def close(self):
         self.server.shutdown()
