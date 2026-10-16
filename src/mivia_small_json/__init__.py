@@ -7,4 +7,4 @@ Family roadmap: json -> log -> issue -> commit
 Constraints: 2 GB sandbox, CPU-only, scikit-learn, rules first.
 """
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"

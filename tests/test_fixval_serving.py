@@ -6,26 +6,32 @@ server (``mcp.py``). Parity reference is REST ``api.py`` (fastapi-only —
 the two stdlib paths mirror its semantics locally on purpose).
 
 The HTTP surface is driven end-to-end over a Unix-socket server bound to
-the gitignored scratch dir (no TCP ports, always stopped in teardown).
+a short-lived temp dir (no TCP ports, always stopped in teardown).
 """
 
 from __future__ import annotations
 
+import contextlib
 import http.client
 import io
 import json
 import os
+import shutil
 import socket
+import tempfile
 import threading
 
 import pytest
 
 from mivia_small_json import mcp, serve
 
-SCRATCH = os.path.join(os.path.dirname(os.path.dirname(
-    os.path.abspath(__file__))), ".scratch", "fixval-serving")
-
 MAX_TEXT_CHARS = 262_144  # api.MAX_TEXT_CHARS, mirrored (api is fastapi-only)
+
+
+def _sock_dir() -> str:
+    # AF_UNIX sun_path caps at 108 bytes; a CI checkout path exceeds it,
+    # so the socket binds under TMPDIR (short) and the dir dies per test.
+    return tempfile.mkdtemp(prefix="fixval-serving-")
 
 
 # ---------------------------------------------------------------------------
@@ -54,15 +60,19 @@ class _UnixHTTPConnection(http.client.HTTPConnection):
         self.sock = s
 
 
+def _sock_path(prefix: str) -> tuple[str, str]:
+    """A fresh temp dir and a pre-cleaned socket path inside it."""
+    sock_dir = _sock_dir()
+    sock_path = os.path.join(sock_dir, f"{prefix}-{os.getpid()}.sock")
+    with contextlib.suppress(FileNotFoundError):
+        os.unlink(sock_path)
+    return sock_dir, sock_path
+
+
 @pytest.fixture()
 def sidecar():
-    """A live stdlib sidecar on a scratch-dir Unix socket (always stopped)."""
-    os.makedirs(SCRATCH, exist_ok=True)
-    sock_path = os.path.join(SCRATCH, f"sidecar-{os.getpid()}.sock")
-    try:
-        os.unlink(sock_path)
-    except FileNotFoundError:
-        pass
+    """A live stdlib sidecar on a temp-dir Unix socket (always stopped)."""
+    sock_dir, sock_path = _sock_path("sidecar")
     server = serve._UnixHTTPServer(sock_path, serve._Handler)
     server.router = None
     thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -86,6 +96,7 @@ def sidecar():
         os.unlink(sock_path)
     except OSError:
         pass
+    shutil.rmtree(sock_dir, ignore_errors=True)
 
 
 # ---------------------------------------------------------------------------
@@ -374,12 +385,7 @@ class TestConcurrencyCap:
 
     def test_bounded_server_carries_the_cap(self):
         """The server carries the resolved cap and that many slots."""
-        os.makedirs(SCRATCH, exist_ok=True)
-        sock_path = os.path.join(SCRATCH, f"cap-attrs-{os.getpid()}.sock")
-        try:
-            os.unlink(sock_path)
-        except FileNotFoundError:
-            pass
+        sock_dir, sock_path = _sock_path("cap-attrs")
         server = serve._UnixHTTPServer(sock_path, serve._Handler,
                                        max_concurrent_handlers=2)
         try:
@@ -400,6 +406,7 @@ class TestConcurrencyCap:
                 os.unlink(sock_path)
             except OSError:
                 pass
+            shutil.rmtree(sock_dir, ignore_errors=True)
 
     def test_active_dispatches_never_exceed_the_cap(self, monkeypatch):
         """Deterministic cap mechanism: dispatch is instrumented with a
@@ -411,12 +418,7 @@ class TestConcurrencyCap:
         the uncapped ThreadingMixIn (red at HEAD). No timing asserts."""
         cap = 2
         k = cap + 3
-        os.makedirs(SCRATCH, exist_ok=True)
-        sock_path = os.path.join(SCRATCH, f"cap-live-{os.getpid()}.sock")
-        try:
-            os.unlink(sock_path)
-        except FileNotFoundError:
-            pass
+        sock_dir, sock_path = _sock_path("cap-live")
         server = serve._UnixHTTPServer(sock_path, serve._Handler,
                                        max_concurrent_handlers=cap)
         server.router = None
@@ -494,3 +496,4 @@ class TestConcurrencyCap:
                 os.unlink(sock_path)
             except OSError:
                 pass
+            shutil.rmtree(sock_dir, ignore_errors=True)
